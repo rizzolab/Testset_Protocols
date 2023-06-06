@@ -1,0 +1,1 @@
+P.3 atomtype had to be manually assigned to cofactor because amber converts to C.3 (see dat/antechamber/ATOMTYPE_CHECK.TAB)

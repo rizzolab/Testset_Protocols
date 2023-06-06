@@ -1,0 +1,4 @@
+antechamber creates bond orders which it later rejects on cofactor (issue for NAD in general)
+bonds (56 57) and (56 69) in 001.lig-prep/cof.am1bcc.mol2 were changed to both be aromatic
+
+P.3 atomtype had to be manually assigned to cofactor

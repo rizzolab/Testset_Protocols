@@ -1,0 +1,35 @@
+It would be nice if run.002 was modified so the minimized ligand, receptor and complex rmsd are printed out to a file rather than to the screen, this way we would have it for record keeping. Or you can pipe the srun slurm sscripts into unique output files for each process but srun in tcsh is wonky enough. 
+
+No more tcsh. Convert all scripts to bash
+
+If there was a warning printed when non standard residue was converted
+
+We should have a single master log and a single list of errors for each system. Then all system with crucial inspection go into a master list
+
+NAD from antechamber is then rejected in prep file creation in antechamber
+
+1A7A is removed for MSE nonstandard residue
+
+#Notes on newer systems
+1R9O is missing a heme
+
+in run.002 add a ">" to the pipe cof.ori.mol2 
+
+run.006 <0 is only a discrepency in one direction. FIX THIS to fit anything != 0
+in run.006 not all ions are HETATM -_- 
+   see 1AID 1J07
+
+SPREADSHEET hasFALSE CARBON hits WITH CL  in ligand formula
+
+*!*!*!* mol2.py in zzz.scripts on github  doesnt create correct bond counts when writing multigrid mol2
+
+MAKE SURE U UPDATE WITH THE CORRECT IN 2023_04/zzz.scripts which is now correct but not pushed
+
+Why isnt Y2P working anymore? investigate this -2GQG 3F5P
+
+REMOVE 1A8I because covalent cofactor "LLP" near ligand in active site
+
+3LSY cofactor needs to be fixed - has 2 unprotonated hydroxyls and formal charge shoudl be -1
+
+Make sure all zzz.master from updated FARMA makes to this zzz.master
+

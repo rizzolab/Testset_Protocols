@@ -20,7 +20,7 @@ with open('tmp2.txt','r') as file2:
 
 #Before doing anything else combine Zn and LP and remove LP count
 #Dont assume Zn and LP wll maintain index as this initial script
-for i in range(len(atom_list1):
+for i in range(len(atom_list1)):
    if atom_list1[i][0]=="Zn":
       Zn_ind=i
       Zn_cnt1=atom_list1[i][1]
@@ -32,12 +32,19 @@ for i in range(len(atom_list1):
 
 #Balance by adding and substracting LP
 #Zn = Zn + LP
-atom_list1[Zn_ind][1]=Zn_cnt1+LP_cnt1
-atom_list2[Zn_ind][1]=Zn_cnt2+LP_cnt2
+
+tmp=Zn_cnt1+LP_cnt1
+atom_list1[Zn_ind]=(atom_list1[Zn_ind][0],tmp)
+tmp=Zn_cnt2+LP_cnt2
+atom_list2[Zn_ind]=(atom_list2[Zn_ind][0],tmp)
+
 
 #LP = LP - LP = 0   
-atom_list1[LP_ind][1]=0
-atom_list2[LP_ind][1]=0
+
+tmp=0
+atom_list1[LP_ind]=(atom_list1[LP_ind][0],tmp)
+tmp=0
+atom_list2[LP_ind]=(atom_list2[LP_ind][0],tmp)
 
 #Atom formula
 formula=""

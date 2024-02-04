@@ -1,1 +1,1 @@
-paste -d ',' zzz.lists/PDB_ProteinName.clean.systems.all zzz.lists/CrossDock_Sort.clean.systems.all tmp1.csv  atmcounts_all.csv  >> zzy.2023_04_12_TestsetSpreadsheet.csv
+paste -d ',' zzz.lists/clean.systems.all.header tmp1.csv  atmcounts_all.csv  >> zzy.2024_02_04_TestsetSpreadsheet.csv

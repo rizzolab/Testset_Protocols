@@ -78,11 +78,11 @@ rm -f temp1.mol2 temp2.mol2 lig_scored.mol2 dock.lig.in
 ### Compute ligand charges with antechamber
 ${amberdir}/acdoctor -i ${system}.lig.processed.mol2 -f mol2 >& ac.lig.log
 
-#if ( `grep "Fatal Error" ac.lig.log | wc -l` ) then
-#   cat ac.lig.log
-#   echo "Fatal Error occurred in ligand preparation. Check ./${system}/001.lig-prep/ac.lig.log for more information."
+if ( `grep "Fatal Error" ac.lig.log | wc -l` ) then
+   cat ac.lig.log
+   echo "Fatal Error occurred in ligand preparation. Check ./${system}/001.lig-prep/ac.lig.log for more information."
 #   exit
-#fi
+fi
 
 ${amberdir}/antechamber -fi mol2 -fo mol2 -c bcc -j 5 -at sybyl -s 2 -pf y -i ${system}.lig.processed.mol2 -o ${system}.lig.am1bcc.mol2 -dr n 
 if grep -q "No convergence in SCF" sqm.out ; then

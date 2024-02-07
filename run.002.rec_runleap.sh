@@ -106,7 +106,7 @@ echo "Running leap.000 (Renumbering): pro.noH.pdb -> ${system}.pro.parm+pro.crd 
 
 ##################################################
 cat  > pro.leap.in<<EOF
-default PBradii mbondi2
+set default PBradii mbondi2
 source oldff/leaprc.ff14SB
 loadoff ions.lib
 loadamberparams ions.frcmod
@@ -183,19 +183,19 @@ ${amberdir}/parmchk2 -i ${system}.lig.ante.mol2 -f mol2 -o ${system}.lig.ante.fr
 
 ### Prepare the cofactor file with antechamber, if it exists
 if ls -l ../001.lig-prep | grep -q "${system}.cof.am1bcc.mol2" ;then
-	echo "Creating cofactor prep file with antechamber" 
-	${amberdir}/antechamber -i ../001.lig-prep/${system}.cof.am1bcc.mol2 -fi mol2  -o ${system}.cof.ante.prep -fo prepi
-	echo "Creating cofactor pdb file with antechamber" 
-	${amberdir}/antechamber -i ../001.lig-prep/${system}.cof.am1bcc.mol2 -fi mol2  -o ${system}.cof.ante.pdb -fo pdb
-	echo "Creating cofactor frcmod file with parmchk2" 
-	${amberdir}/parmchk2 -i ${system}.cof.ante.prep -f prepi -o ${system}.cof.ante.frcmod
-fi
+        echo "Creating cofactor prep file with antechamber" 
+        $amberdir/antechamber -fi mol2 -fo prepi -i ../001.lig-prep/$system.cof.am1bcc.mol2 -o $system.cof.ante.prepi -at gaff2 -j 5 -rn COF -dr no
+        echo "Creating cofactor pdb file with antechamber" 
+         ${amberdir}/antechamber -fi mol2 -fo pdb -i ../001.lig-prep/${system}.cof.am1bcc.mol2 -o ${system}.cof.ante.pdb -at sybyl -j 5 -rn COF -dr no
 
+        echo "Creating cofactor frcmod file with parmchk2" 
+        ${amberdir}/parmchk2 -i ${system}.cof.ante.prepi -f prepi -o ${system}.cof.ante.frcmod
+fi
 
 ### Make tleap input for Complex
 ##################################################
 cat > com.leap.in<<EOF
-default PBradii mbondi2
+set default PBradii mbondi2
 source oldff/leaprc.ff14SB
 source leaprc.gaff
 loadoff ions.lib

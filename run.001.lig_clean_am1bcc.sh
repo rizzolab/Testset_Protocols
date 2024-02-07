@@ -92,12 +92,12 @@ mv sqm.out sqm.lig.out
 mv sqm.in sqm.lig.in
 
 
-### If it exists, also compute cofactor charges
+### If it exists, also compute cofactor charges. This block was edited to correct NADP/ NAD issues
 if  ls ${masterdir} | grep -q "${system}.cof.moe.mol2" ; then
-	${amberdir}/acdoctor -i ${system}.cof.processed.mol2 -f mol2
-	${amberdir}/antechamber -fi mol2 -fo mol2 -c bcc -j 1 -at sybyl -s 2 -pf y -i ${system}.cof.processed.mol2 -o ${system}.cof.am1bcc.mol2
-	if grep -q "No convergence in SCF" sqm.out ; then
-		${amberdir}/antechamber -fi mol2 -fo mol2 -c bcc -j 5 -at sybyl -s 2 -pf y -ek "itrmax=100000, qm_theory='AM1', grms_tol=0.0002, tight_p_conv=0, scfconv=1.d-8" -i $system.cof.processed.mol2 -o $system.cof.am1bcc.mol2
+#	${amberdir}/acdoctor -i ${system}.cof.processed.mol2 -f mol2
+        ${amberdir}/antechamber -fi mol2 -fo mol2 -i ${system}.cof.processed.mol2 -at sybyl -o ${system}.cof.am1bcc.mol2 -c bcc -rn COF -dr no
+        if grep -q "No convergence in SCF" sqm.out ; then
+                ${amberdir}/antechamber -fi mol2 -fo mol2  -i $system.cof.processed.mol2 -at sybyl -o $system.cof.am1bcc.mol2 -c bcc -rn COF -dr no  -s 2 -pf y -ek "itrmax=100000, qm_theory='AM1', grms_tol=0.0002, tight_p_conv=0, scfconv=1.d-8"
 	fi
 	mv sqm.out sqm.cof.out
 	mv sqm.in sqm.cof.in

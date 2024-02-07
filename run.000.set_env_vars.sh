@@ -10,12 +10,13 @@
 ### For running the scripts on Cluster
 
 ### Source some global variables
+module load amber/22
 
 	### DOCK home directory
     export DOCKHOMEWORK="/gpfs/projects/rizzo/zzz.programs/dock6.9_mpiv2018.0.3"
 
 	### AMBER home directory
-    export AMBERHOMEWORK="/gpfs/software/amber/16/gcc"
+    export AMBERHOMEWORK="/gpfs/software/amber/22/gcc"
 
 	### MOE home directory
 	export MOEHOMEWORK="/gpfs/projects/rizzo/zzz.programs/moe_2016.0801/"
@@ -24,7 +25,7 @@
     export DMSHOMEWORK="/gpfs/projects/rizzo/zzz.programs/dms"
 
 	### Root directory (the directory where all run.xxx.csh scripts are located)
-	export VS_ROOTDIR="/gpfs/projects/rizzo/ccorbo/Building_Stuff/2023_04_02_BashedTestset"
+	export VS_ROOTDIR="/gpfs/projects/rizzo/ "
 
     ### MPI directory (this is where mpirun is located, compatible with dock6.mpi)
     export VS_MPIDIR="/gpfs/software/intel/parallel-studio-xe/2018_3/compilers_and_libraries/linux/mpi/intel64"

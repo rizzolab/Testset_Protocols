@@ -221,7 +221,7 @@ EOF
 if ls -l ${masterdir} | grep -q "${system}.cof.moe.mol2" ;then
 	echo "Generating complex = pro+lig+cof"
 	echo "loadamberparams ${system}.cof.ante.frcmod" >> com.leap.in
-	echo "loadamberprep ${system}.cof.ante.prep" >> com.leap.in
+	echo "loadamberprep ${system}.cof.ante.prepi" >> com.leap.in
 	echo "COF = loadpdb ${system}.cof.ante.pdb" >> com.leap.in
 	echo "REC = combine { PRO COF }" >> com.leap.in
 	echo "saveamberparm COF ${system}.cof.parm ${system}.cof.ori.crd"  >> com.leap.in

@@ -47,17 +47,21 @@ while (<FILE>) {
 $natm=$i;
 close (FILE);
 
-# Search leap output for long bonds
-# WARNING: There is a bond of 6.442116 angstroms between: 
-# -------  .R<LEU 37>.A<C 18> and .R<PRO 38>.A<N 1>
-# WARNING: There is a bond of 13.371721 angstroms between: 
-# -------  .R<PRO 112>.A<C 13> and .R<GLU 113>.A<N 1>
-# WARNING: The unperturbed charge of the unit: -2.000000 is not zero.
+#THIS IS THE FORMAT OF WARNING EXPECTED IN $sys.pro.001.leap.log  
 
+#/gpfs/software/amber/22/gcc/bin/teLeap: Warning!
+#There is a bond of 30.948 angstroms between C and N atoms:
+#-------  .R<ARG 36>.A<C 23> and .R<ILE 37>.A<N 1>
+
+#Warning and There is a bond of are printed on separate lines
+#Only want to detect "There is a bond of" if prev line was warning
+#init warning as 0 and only set to 1 while previous line (processed at end of loop) is Warning
+$warning=0;
 @longbondres = ();
 open (LEAPOUT) or die "can't open $FILE\n";
 while (<LEAPOUT>) {   
-        if ( /WARNING: There is a bond of / ) {
+#        if ( /WARNING: There is a bond of / ) {
+        if (( /There is a bond of / ) and ($warning==1)) {
 		$_ = <LEAPOUT>;
 		print $_; 
 		@line=split(/[ >]/);
@@ -69,7 +73,13 @@ while (<LEAPOUT>) {
 			push (@longbondres, $res2);	# draw long bond
 			print "Long bond between residues detected: $res1 --- $res2\n";
 		}
-	}
+        }
+        #If current line contains phrase Warning, keep track of this for next line
+        if ( / Warn/ ){
+           $warning=1;
+        } else {
+           $warning=0;
+        }
 }
 push (@longbondres, -1);			# Mark the end of the long bond queue
 close (LEAPOUT);

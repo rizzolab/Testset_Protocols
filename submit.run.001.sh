@@ -10,7 +10,7 @@ source run.000.set_env_vars.sh
 mkdir zzz.outfiles
 for pdb in `cat zzz.lists/clean.systems.all`; do
 echo "Running " $pdb
-   srun --exclusive -N1 -n1 bash run.001.lig_clean_am1bcc.sh  ${pdb} &> zzz.outfiles/${pdb}.001.lig.out &
+   srun --mem=1000 --exclusive -N1 -n1 bash run.001.lig_clean_am1bcc.sh  ${pdb} &> zzz.outfiles/${pdb}.001.lig.out &
 done
 
 wait

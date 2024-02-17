@@ -59,7 +59,7 @@ sed -n "/ATOM/,/BOND/p" ../002.rec-prep/${system}.rec.clean.mol2 | awk '{print $
 sed -n "/ATOM/,/BOND/p" ${system}.rec.foramber.mol2 | awk '{print $6}' | awk -F '.' '{print $1}'>tmp2.txt
 sed -n "/ATOM/,/BOND/p" ${masterdir}/${system}.cof.moe.mol2 | awk '{print $6}' | awk -F '.' '{print $1}'>>tmp2.txt
 
-python ${scriptdir}/run.006v5.py > py.out
+python ${scriptdir}/bookkeeping_heavy_atoms.py > py.out
 head -n1 py.out > atom_forml_rec.txt
 tail -n2 py.out| head -n1 | awk -F'#' '{for (i=2;i<NF; i++) printf $i " "; print $NF}' > atom_diff_rec.txt
 tail -n1 py.out > atom_diff_rec_mag.txt
@@ -71,7 +71,7 @@ rm tmp1.txt tmp2.txt py.out
 #Bookkeeping atoms added or deleted
 #Heavy atoms added by amber
 echo "0" > heavy_atoms_added.txt
-grep "Heavy" ../002.rec-prep/leap.log | awk '{print $1}' > heavy_atoms_added.txt
+grep "Heavy" ../002.rec-prep/leap.log | awk '{print $1}' >> heavy_atoms_added.txt
 awk '{ sum += $1; n++ }  END {print sum; }' heavy_atoms_added.txt >> heavy_atoms_added_sum.txt
 
 #Atoms added or deleted in defined mutation

@@ -25,7 +25,7 @@ module load amber/22
     export DMSHOMEWORK="/gpfs/projects/rizzo/zzz.programs/dms"
 
 	### Root directory (the directory where all run.xxx.csh scripts are located)
-	export VS_ROOTDIR="/gpfs/projects/rizzo/ "
+	export VS_ROOTDIR=`pwd`
 
     ### MPI directory (this is where mpirun is located, compatible with dock6.mpi)
     export VS_MPIDIR="/gpfs/software/intel/parallel-studio-xe/2018_3/compilers_and_libraries/linux/mpi/intel64"

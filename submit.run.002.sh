@@ -7,7 +7,7 @@
 #SBATCH --output=zyy.02.rec.out
 
 source run.000.set_env_vars.sh 
-for pdb in `cat zzz.lists/CYX.txt`;do
+for pdb in `cat zzz.lists/clean.systems.all`;do
 echo "Running " $pdb
    srun --mem=1000 --exclusive -N1 -n1 bash run.002.rec_runleap.sh     ${pdb} &> zzz.outfiles/${pdb}.002.rec.out &
 done

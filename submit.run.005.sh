@@ -7,7 +7,7 @@
 #SBATCH --output=zyy.05.mgr.out
 
 source run.000.set_env_vars.sh 
-for pdb in `cat zzz.lists/CYX.txt`;do
+for pdb in `cat zzz.lists/clean.systems.all`;do
 echo "Running " $pdb
    srun --mem=1000 --exclusive -N1 -n1 bash run.005.multigrids.sh  ${pdb} &> zzz.outfiles/${pdb}.005.mgr.out &
 done

@@ -6,8 +6,8 @@
 #SBATCH --job-name=Whaddup
 #SBATCH --output=boop
 system_file="zzz.lists/clean.systems.all"
-mkdir zzz.SB2023_Testset_2024_02_19
-cd zzz.SB2023_Testset_2024_02_19
+mkdir zzz.testsetname
+cd zzz.testsetname
 
 for system in `cat ../${system_file}`; do  
 mkdir $system

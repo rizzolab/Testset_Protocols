@@ -9,7 +9,7 @@
 source run.000.set_env_vars.sh 
 for pdb in `cat zzz.lists/2024_11_04_rerun.dat  `;do
 echo "Running " $pdb
-   srun --exclusive -N1 -n1 bash run.003.rec_dms_sph.sh  ${pdb} &> zzz.outfiles/${pdb}.003.sph.out &
+   srun  --mem=1000  --exclusive -N1 -n1 bash run.003.rec_dms_sph.sh  ${pdb} &> zzz.outfiles/${pdb}.003.sph.out &
 done
 
 wait

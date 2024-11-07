@@ -1,4 +1,4 @@
-#!/bin/bash -
+#!/bin/bash 
 
 #
 # This script prepares the receptor. Input required is ${system}.rec.foramber.pdb, which was

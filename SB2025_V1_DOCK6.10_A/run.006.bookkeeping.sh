@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --partition=long-28core
-#SBATCH --time=10:00:00
+#SBATCH --partition=short-28core
+#SBATCH --time=1:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=28
 #SBATCH --job-name=atmcnt
@@ -30,6 +30,7 @@ grep 'if ($rec_resname' zzz.scripts/fix_nonstandard_res.pl | awk -F'"' '{print $
 ####################################
 #Ligand
 for system in `cat zzz.lists/clean.systems.all`;
+#for system in `cat zzz.lists/test.dat`;
 do
 echo $system
 rm -r $system/zzz.dat
@@ -59,12 +60,14 @@ sed -n "/ATOM/,/BOND/p" ../002.rec-prep/${system}.rec.clean.mol2 | awk '{print $
 sed -n "/ATOM/,/BOND/p" ${system}.rec.foramber.mol2 | awk '{print $6}' | awk -F '.' '{print $1}'>tmp2.txt
 sed -n "/ATOM/,/BOND/p" ${masterdir}/${system}.cof.moe.mol2 | awk '{print $6}' | awk -F '.' '{print $1}'>>tmp2.txt
 
+
 python ${scriptdir}/bookkeeping_heavy_atoms.py > py.out
 head -n1 py.out > atom_forml_rec.txt
 tail -n2 py.out| head -n1 | awk -F'#' '{for (i=2;i<NF; i++) printf $i " "; print $NF}' > atom_diff_rec.txt
 tail -n1 py.out > atom_diff_rec_mag.txt
 
-rm tmp1.txt tmp2.txt py.out
+
+#rm tmp1.txt tmp2.txt py.out
 #####################################
 #End of atom counts
 
@@ -73,6 +76,7 @@ rm tmp1.txt tmp2.txt py.out
 echo "0" > heavy_atoms_added.txt
 grep "Heavy" ../002.rec-prep/leap.log | awk '{print $1}' >> heavy_atoms_added.txt
 awk '{ sum += $1; n++ }  END {print sum; }' heavy_atoms_added.txt >> heavy_atoms_added_sum.txt
+
 
 #Atoms added or deleted in defined mutation
 CME=`grep "CME" ${masterdir}/${system}.rec.foramber.pdb  | grep "ATOM" | awk '{print $6}'| uniq| wc -l`
@@ -104,13 +108,14 @@ echo "0" > duplicate_remove.txt
 grep ": duplicate" ../002.rec-prep/leap.log | awk -F'(' '{print $2}' | awk '{print $2}' | tr -d ')' >> duplicate_remove.txt
 awk '{ sum += $1; n++ }  END {print sum; }' duplicate_remove.txt >>duplicate_remove_sum.txt
 
+#DELETE
 v1=`cat atom_diff_rec_mag.txt`
 v2=`cat heavy_atoms_added_sum.txt `
 v3=`cat  duplicate_remove_sum.txt`
 v4=`cat  heavy_atoms_deleted_mutation.txt`
+echo $v1
 v5=` echo " $v1 - $v2 + ($v3/2) + $v4 " |bc -l`
 echo $v1 "," $v2 "," $v3 "," $v4 > out.dat
 echo $v5 > overall_balance.dat
-
 cd ../../
 done

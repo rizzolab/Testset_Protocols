@@ -96,7 +96,7 @@ print "zzz.fix.nonstandard.res.perl: Ligand has $lignatm atoms\n";
 
 #Start Accepted List
 # Identify all non-standard residues, mutate to ALA if far from ligand
-%amino_acids = ('ALA',1,'ARG',2,'ASN',3,'ASP',4,'CYS',5,'GLU',6,'GLY',7,'HIS',8,'ILE',9,'LEU',10,'LYS',11,'MET',12,'PHE',13,'PRO',14,'SER',15,'THR',16,'TRP',17,'TYR',18,'VAL',19,'GLN',20,'HEM',21,'Y2P',22,'GLH',23,'CAL',24,'MAG',25,'ZIN',26,'CHL',27,'POT',28,'HIE',29,'ACE',30,'NME',31,'NHE',32,'CA',33,'MG',34,'ZN',35,'HID',36,'ASH',37,'SOD',38,'MAN',39,'CYX',40);
+%amino_acids = ('ALA',1,'ARG',2,'ASN',3,'ASP',4,'CYS',5,'GLU',6,'GLY',7,'HIS',8,'ILE',9,'LEU',10,'LYS',11,'MET',12,'PHE',13,'PRO',14,'SER',15,'THR',16,'TRP',17,'TYR',18,'VAL',19,'GLN',20,'HEM',21,'Y2P',22,'GLH',23,'HIE',29,'ACE',30,'NME',31,'NHE',32,'CA',33,'MG',34,'ZN',35,'HID',36,'ASH',37,'CYX',40,'NA',41,'CL',42,'K',43);
 #Stop Accepted List
 for ($j=0; $j<$recnatm; $j++)
 {

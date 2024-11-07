@@ -1,4 +1,4 @@
-#!/bin/bash -f
+#!/bin/bash -
 
 #
 # This script prepares the receptor. Input required is ${system}.rec.foramber.pdb, which was
@@ -40,19 +40,31 @@ cd ${rootdir}/${system}/002.rec-prep/
 
 ### Check to see if the protein file is present, and prepare it for amber
 if  ! ls -l  ${masterdir} | grep -q "${system}.rec.foramber.pdb" ; then
-	if ls -l ${masterdir}| grep -q "${system}.rec.moe.pdb" ;then
-		# If there is not a hand-made rec.foramber.pdb file, make it here from rec.moe.pdb
-		echo "Convert sed ${system}.rec.moe.pdb -> ${system}.rec.foramber.pdb" | tee ${system}.report.txt
-		${scriptdir}/foramber.sed ${masterdir}/${system}.rec.moe.pdb > ./${system}.rec.foramber.pdb
-	else 
-		echo "Receptor file does not seem to exist. Exiting."
-		exit
-	fi
+	echo "Receptor file does not seem to exist. Exiting."
+	exit
 else
 	# Hand-made rec.foramber.pdb file exists, so copy it over
 	cp ${masterdir}/${system}.rec.foramber.pdb ./${system}.rec.foramber.pdb
 fi
 
+#Following step deletes unexpected HETATM residues so give a warning what is being deleted
+if  grep HETATM $system.rec.foramber.pdb| grep -v -E "REMARK|REVDAT"  | grep -q -v -E " CA| MG | NA |ZN | K | CL | HEM | Y2P ";then
+   echo "WARNING!!! The following residues are being deleted due to unexpected HETATM"
+   grep HETATM *pdb| grep -v -E "REMARK|REVDAT"  | grep -v -E " CA| MG | NA |ZN | K | CL | HEM | Y2P "
+fi
+
+
+#Change all accepted HETATM lines to ATOM and delete all other lines
+${scriptdir}/hetatm.sed -i ${system}.rec.foramber.pdb 
+
+
+
+
+# Some sodium and chlorine come with names incompatible with vdw parm file. Also NA is already a Nitrogen in Heme
+if  egrep -w 'ATOM|HETATM' ${system}.rec.foramber.pdb | egrep -w 'ZIN|MAG|CAL|CHL|SOD|POT' ; then
+ echo "3 letter ion codes not accepted. Change Atom Name and Residue Name to ZN,MG,CA,CL,NA or K"
+ exit
+fi
 
 ### Remove unusual newlines from receptor
 perl -pi -e 's/\r\n/\n/g' ${system}.rec.foramber.pdb
@@ -412,12 +424,21 @@ rm -f ions.frcmod ions.lib parm.e16.dat gaff*frcmod y2p.* heme.*
 #rm -f ${system}.rec.min.mol2 ${system}.rec.nomin.mol2 ${system}.rec.foramber.pdb 
 #rm -f ${system}.com.* ${system}.lig.* ${system}.rec.leap* ${system}.rec.gas*
 #rm -f mdinfo grid.in sander.* ssbonds.txt
-### Deal with ions and make them suitable for amber
-awk '{gsub("ZN","Zn",$6)}1' ${system}.rec.clean.mol2 > tmp1.rec.pdb
-awk '{gsub("MG","Mg",$6)}1' tmp1.rec.pdb> tmp2.rec.pdb
-awk '{gsub("CA", "Ca",$6)}1' tmp2.rec.pdb>  ${system}.rec.clean.mol2
+
+### ambpdb not writing out sybyl atom type for ion. (Calcium, Sodium, Magnesium, Zinc, Chlorine)
+### Need to make them suitable for GRID (HEME cofactor contains Nitrogen NA)
+#It should be ensured there are no atom types in the 6th field which match the uppercase strings other than intended ions
+perl -pe 's{^\s*(\S+\s+){5}\K\S+}{$& =~ s/CA/Ca/gr}e' $system.rec.clean.mol2 > tmp1
+perl -pe 's{^\s*(\S+\s+){5}\K\S+}{$& =~ s/NA/Na/gr}e unless /HEM/' tmp1 > tmp2
+perl -pe 's{^\s*(\S+\s+){5}\K\S+}{$& =~ s/MG/Mg/gr}e' tmp2 > tmp3
+perl -pe 's{^\s*(\S+\s+){5}\K\S+}{$& =~ s/ZN/Zn/gr}e' tmp3 > tmp4
+perl -pe 's{^\s*(\S+\s+){5}\K\S+}{$& =~ s/CL/Cl/gr}e' tmp4 > tmp5
 
 
-rm tmp1.rec.pdb tmp2.rec.pdb
 
+#Save the unedited version
+mv ${system}.rec.clean.mol2 $system.rec.before_ion_edit.mol2
+mv tmp5 ${system}.rec.clean.mol2 
+
+rm tmp1 tmp2 tmp3 tmp4 
 exit

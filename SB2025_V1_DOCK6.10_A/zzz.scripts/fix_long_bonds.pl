@@ -47,11 +47,6 @@ while (<FILE>) {
 $natm=$i;
 close (FILE);
 
-#THIS IS THE FORMAT OF WARNING EXPECTED IN $sys.pro.001.leap.log  
-
-#/gpfs/software/amber/22/gcc/bin/teLeap: Warning!
-#There is a bond of 30.948 angstroms between C and N atoms:
-#-------  .R<ARG 36>.A<C 23> and .R<ILE 37>.A<N 1>
 
 #Warning and There is a bond of are printed on separate lines
 #Only want to detect "There is a bond of" if prev line was warning
@@ -74,7 +69,6 @@ while (<LEAPOUT>) {
 			print "Long bond between residues detected: $res1 --- $res2\n";
 		}
         }
-        #If current line contains phrase Warning, keep track of this for next line
         if ( / Warn/ ){
            $warning=1;
         } else {
@@ -87,8 +81,7 @@ close (LEAPOUT);
 #fix histidines protonated incorrectly
 for ($j=0; $j<$natm; $j++)
 {
-	next if (!($resname[$j] eq "CAL") and !($resname[$j] eq "MAG") and !($resname[$j] eq "ZIN") and !($resname[$j] eq "ZN") and 
- !($resname[$j] eq "MG") and !($resname[$j] eq "CA"));
+	next if (!($resname[$j] eq "CAL") and !($resname[$j] eq "MAG") and !($resname[$j] eq "ZIN") and !($resname[$j] eq "ZN") and !($resname[$j] eq "MG") and !($resname[$j] eq "CA"));
 	for ($i=0; $i<$natm; $i++)
 	{
 		next if !($resname[$i] eq "HIE");	# Process only HIE
@@ -215,7 +208,8 @@ for ($j=0;$j<$natm;$j++) {
 	# Print TER after each protein chain (Leap guarantees the OXT after each chain)
 	#print OUT "TER\n" if ( ($atoname[$j] eq "OXT")or($atoname[$j] eq "CAL")or($atoname[$j] eq "MAG")or($atoname[$j] eq "ZIN")or($atoname[$j] eq "CHL") );
 
-	if ( ($atoname[$j] eq "OXT")or($atoname[$j] eq "CAL")or($atoname[$j] eq "MAG")or($atoname[$j] eq "ZIN")or($atoname[$j] eq "CHL") ) {
+	#if ( ($atoname[$j] eq "OXT")or($atoname[$j] eq "CA")or($atoname[$j] eq "MAG")or($atoname[$j] eq "ZIN")or($atoname[$j] eq "CL") ) {
+        if ( ($atoname[$j] eq "OXT")or($atoname[$j] eq "CA" and $resname[$j] eq "CA")or($atoname[$j] eq "MG" and $resname[$j] eq "MG")or($atoname[$j] eq "ZN" and $resname[$j] eq "ZN")or($atoname[$j] eq "CL" and $resname[$j] eq "CL")or($atoname[$j] eq "K" and $resname[$j] eq "K")or($atoname[$j] eq "NA" and $resname[$j] eq "NA") ) {
 		print "TER added after $atonumb[$j] $atoname[$j] $resname[$j] $resnumb[$j]\n";
 		print OUT "TER\n";
 	}

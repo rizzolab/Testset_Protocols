@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --partition=long-28core
-#SBATCH --time=15:00:00
+#SBATCH --partition=short-28core
+#SBATCH --time=1:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=4
 #SBATCH --job-name=bkp
